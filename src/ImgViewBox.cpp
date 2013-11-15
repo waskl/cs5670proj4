@@ -25,7 +25,20 @@ void ImgView::solveForOppositeCorners(double u0, double v0, double u2, double v2
     // Remember that this face is on a plane perpendicular to the plane x=0
     // Store the results in variables 'u1, v1' and 'u3, v3'
 
-printf("TODO: %s:%d\n", __FILE__, __LINE__); 
+//printf("TODO: %s:%d\n", __FILE__, __LINE__); 
+
+	double slopeOne = (xVanish.v - v0) / (xVanish.u - u0);
+	double slopeTwo = (zVanish.v - v2) / (zVanish.u - u2);
+
+	u1 = ((slopeOne * xVanish.u) + zVanish.v - xVanish.v - (slopeTwo * zVanish.u)) / (slopeOne - slopeTwo);
+	v1 = slopeOne * (u1 - xVanish.u) + xVanish.v;
+
+	slopeOne = (zVanish.v - v0) / (zVanish.u - u0);
+	slopeTwo = (xVanish.v - v2) / (xVanish.u - u2);
+
+	u3 = ((slopeOne * zVanish.u) + xVanish.v - zVanish.v - (slopeTwo * xVanish.u)) / (slopeOne - slopeTwo);
+	v3 = slopeOne * (u3 - zVanish.u) + zVanish.v;
+
 
     /********* END TODO ********/
 }
@@ -63,8 +76,35 @@ void ImgView::solveForOppositeFace(SVMSweep *sweep, double imgX, double imgY,
     // Store the results in variables p4, p5, p6, and p7.
 	Vec3d p4, p5, p6, p7;
 
-printf("TODO: %s:%d\n", __FILE__, __LINE__); 
+//printf("TODO: %s:%d\n", __FILE__, __LINE__); 
+	
+	double slopeOne = (yVanish.v - p1[1]) / (yVanish.u - p1[0]);
+	double slopeTwo = (xVanish.v - pMouse[1]) / (xVanish.u - pMouse[0]);
 
+	p5[0] = ((slopeOne * yVanish.u) + xVanish.v - yVanish.v - (slopeTwo * xVanish.u)) / (slopeOne - slopeTwo);
+	p5[1] = slopeOne * (p5[0] - yVanish.u) + yVanish.v;
+	p5[2] = 1.0;
+
+	slopeOne = (yVanish.v - p0[1]) / (yVanish.u - p0[0]);
+	slopeTwo = (xVanish.v - p5[1]) / (xVanish.u - p5[0]);
+
+	p4[0] = ((slopeOne * yVanish.u) + xVanish.v - yVanish.v - (slopeTwo * xVanish.u)) / (slopeOne - slopeTwo);
+	p4[1] = slopeOne * (p4[0] - yVanish.u) + yVanish.v;
+	p4[2] = 1.0;
+
+	slopeOne = (zVanish.v - p4[1]) / (zVanish.u - p4[0]);
+	slopeTwo = (yVanish.v - p3[1]) / (yVanish.u - p3[0]);
+
+	p7[0] = ((slopeOne * zVanish.u) + yVanish.v - zVanish.v - (slopeTwo * yVanish.u)) / (slopeOne - slopeTwo);
+	p7[1] = slopeOne * (p7[0] - zVanish.u) + zVanish.v;
+	p7[2] = 1.0;
+
+	slopeOne = (yVanish.v - p2[1]) / (yVanish.u - p2[0]);
+	slopeTwo = (xVanish.v - p7[1]) / (xVanish.u - p7[0]);
+
+	p6[0] = ((slopeOne * yVanish.u) + xVanish.v - yVanish.v - (slopeTwo * xVanish.u)) / (slopeOne - slopeTwo);
+	p6[1] = slopeOne * (p6[0] - yVanish.u) + yVanish.v;
+	p6[2] = 1.0;
 
     /******** END TODO ********/
 
@@ -86,9 +126,32 @@ void ImgView::find3DPositionsBox(SVMPoint *points[8])
 	// you need to implement.  For that to work, you will need to push and pop points from
 	// pntSelStack.  There are multiple ways to implement this function.
 
-printf("TODO: %s:%d\n", __FILE__, __LINE__); 
+//printf("TODO: %s:%d\n", __FILE__, __LINE__); 
+	pntSelStack.push_back(points[0]);
+	pntSelStack.push_back(points[1]);
+	sameXY();
+	pntSelStack.pop_back();
+	pntSelStack.push_back(points[4]);
+	sameXY();
+	pntSelStack.pop_back();
+	pntSelStack.push_back(points[5]);
+	sameXY();
+	pntSelStack.pop_back();
 
-
+	pntSelStack.push_back(points[3]);
+	sameZPlane();
+	pntSelStack.push_back(points[2]);
+	sameXY();
+	pntSelStack.pop_back();	
+	pntSelStack.push_back(points[6]);
+	sameXY();
+	pntSelStack.pop_back();
+	pntSelStack.push_back(points[7]);
+	sameXY();
+	pntSelStack.pop_back();		//pop 7
+	pntSelStack.pop_back();		//pop 3
+	pntSelStack.pop_back();		//pop 0
+	
 	/********* END TODO ********/
 }
 
