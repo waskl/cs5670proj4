@@ -142,17 +142,35 @@ void ConvertToPlaneCoordinate(const vector<SVMPoint>& points, vector<Vec3d>& bas
 
 	Vec3d Ex;
 	Ex = basisPts[1]-basisPts[0];
+
+	int Q = 2;
+	double CloseToZero = 1;
+
+	for (int i=2; i < numPoints; i++) {
+		
+        double Dot = (basisPts[i].operator[](0) - basisPts[0].operator[](0)) * Ex.operator[](0);
+		Dot +=(basisPts[i].operator[](1) - basisPts[0].operator[](1)) * Ex.operator[](1);
+		Dot +=(basisPts[i].operator[](2) - basisPts[0].operator[](2)) * Ex.operator[](2);
+
+		if(Dot < CloseToZero)
+		{
+			CloseToZero = Dot;
+			Q = i;
+		}
+
+    }
+
 	Ex.operator/=(Ex.length());
 
 	Vec3d S;
-	double Dot = (basisPts[2].operator[](0) - basisPts[0].operator[](0)) * Ex.operator[](0);
-	Dot +=(basisPts[2].operator[](1) - basisPts[0].operator[](1)) * Ex.operator[](1);
-	Dot +=(basisPts[2].operator[](2) - basisPts[0].operator[](2)) * Ex.operator[](2);
+	double Dot = (basisPts[Q].operator[](0) - basisPts[0].operator[](0)) * Ex.operator[](0);
+	Dot +=(basisPts[Q].operator[](1) - basisPts[0].operator[](1)) * Ex.operator[](1);
+	Dot +=(basisPts[Q].operator[](2) - basisPts[0].operator[](2)) * Ex.operator[](2);
 
 	S = Ex;
 	S.operator*=(Dot);
 
-	Vec3d T = basisPts[2] - basisPts[0] - S;
+	Vec3d T = basisPts[Q] - basisPts[0] - S;
 	Vec3d Ey = T;
 	Ey.operator/=(Ey.length());
 
